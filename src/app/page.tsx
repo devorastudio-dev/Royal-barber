@@ -28,7 +28,7 @@ const slides = [
   {
     id: 1,
     image: 'https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=1920&q=80',
-    title: 'Transforme seu Estilo',
+    title: 'Transforme seu Visual',
     subtitle: 'Experimente a excelência em cuidados masculinos',
   },
   {

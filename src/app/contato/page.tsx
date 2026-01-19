@@ -272,7 +272,7 @@ function ContactContent() {
                 <div className="p-2 bg-amber-500/20 rounded-xl">
                   <Clock className="w-6 h-6 text-amber-500" />
                 </div>
-                Horário de{' '} <br/>
+                Horário de{' '}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-600">
                   Funcionamento
                 </span>
