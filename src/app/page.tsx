@@ -43,7 +43,7 @@ const slides = [
   },
   {
     id: 3,
-    image: 'https://images.unsplash.com/photo-1621605815971-fbc98d6d4e84?w=1920&q=80',
+    image: 'https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=1920&q=80',
     title: 'Corte Perfeito',
     subtitle: 'Porque você merece o melhor',
   },
@@ -158,18 +158,6 @@ export default function Home() {
           ))}
         </div>
 
-        {/* Play/Pause */}
-        <button
-          onClick={() => setIsPlaying(!isPlaying)}
-          className="absolute bottom-32 right-1/2 translate-x-20 p-3 bg-white/10 backdrop-blur-sm rounded-full hover:bg-white/20 transition-colors z-20"
-        >
-          {isPlaying ? (
-            <PauseIcon className="w-5 h-5 text-white" />
-          ) : (
-            <Play className="w-5 h-5 text-white" />
-          )}
-        </button>
-
         {/* Content */}
         <div className="relative z-10 max-w-6xl mx-auto px-4 text-center">
           <motion.div
@@ -186,7 +174,7 @@ export default function Home() {
               className="inline-flex items-center gap-2 px-6 py-3 bg-amber-500/10 backdrop-blur-sm border border-amber-500/30 rounded-full text-amber-500 text-sm font-medium mb-8"
             >
               <Sparkles className="w-5 h-5 animate-pulse" />
-              ✂️ Barbearia Premium desde 2008
+               Barbearia Premium desde 2008
             </motion.div>
 
             {/* Title */}

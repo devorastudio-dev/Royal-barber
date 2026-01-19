@@ -23,7 +23,7 @@ function BookingContent() {
         {/* Additional Info */}
         <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-gray-900/50 rounded-xl p-6 border border-gray-800 text-center">
-            <div className="text-3xl mb-3">📱</div>
+            
             <h3 className="font-bold text-white mb-2">Pelo WhatsApp</h3>
             <p className="text-gray-400 text-sm mb-3">
               Prefere agendar pelo WhatsApp? Sem problemas!
@@ -39,7 +39,7 @@ function BookingContent() {
           </div>
 
           <div className="bg-gray-900/50 rounded-xl p-6 border border-gray-800 text-center">
-            <div className="text-3xl mb-3">❓</div>
+            
             <h3 className="font-bold text-white mb-2">Dúvidas?</h3>
             <p className="text-gray-400 text-sm mb-3">
               Tire suas dúvidas sobre nossos serviços e horários.
@@ -53,13 +53,13 @@ function BookingContent() {
           </div>
 
           <div className="bg-gray-900/50 rounded-xl p-6 border border-gray-800 text-center">
-            <div className="text-3xl mb-3">🔄</div>
+            
             <h3 className="font-bold text-white mb-2">Cancelamento</h3>
             <p className="text-gray-400 text-sm mb-3">
               Não pôde comparecer? Cancele ou remarque com antecedência.
             </p>
             <a
-              href="tel:11999999999"
+              href="tel:31999999999"
               className="text-amber-500 font-semibold hover:text-amber-400"
             >
               Ligar para Nós →

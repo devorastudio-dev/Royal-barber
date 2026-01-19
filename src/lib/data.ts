@@ -1,6 +1,7 @@
-// Dados mockados para a barbearia
+
 import { Barber, Service, ContactInfo, Appointment } from '@/types';
 import { supabase, AppointmentRow, mapAppointmentRow } from './supabase';
+import { Scissors, Palette} from 'lucide-react';
 
 // Serviços disponíveis
 export const services: Service[] = [
@@ -10,7 +11,7 @@ export const services: Service[] = [
     description: 'Corte moderno e personalizado para valorizar seu estilo. Incluye lavagem e finalização.',
     duration: 45,
     price: 50,
-    icon: '✂️',
+    icon: Scissors,
     features: ['Lavagem', 'Corte personalizado', 'Finalização', 'Toalha quente']
   },
   {
@@ -19,7 +20,7 @@ export const services: Service[] = [
     description: 'Modelagem e acabamento perfeito para sua barba. Incluye navalhado ou máquina.',
     duration: 30,
     price: 35,
-    icon: '🧔',
+    icon: Scissors,
     features: ['Modelagem', 'Acabamento', 'Hot towel', 'Gel after shave']
   },
   {
@@ -28,7 +29,7 @@ export const services: Service[] = [
     description: 'Combo completo para quem quer cuidar do visual. Economia de tempo e preço especial.',
     duration: 60,
     price: 75,
-    icon: '💈',
+    icon: Scissors,
     features: ['Lavagem', 'Corte completo', 'Barba modelada', 'Massagem facial']
   },
   {
@@ -37,7 +38,7 @@ export const services: Service[] = [
     description: 'Corte degradê com navalha ou máquina, o estilo que está na moda.',
     duration: 30,
     price: 40,
-    icon: '🎯',
+    icon: Palette,
     features: ['Máquina 0 a 3', 'Navalha', 'Acabamento', 'Finalização']
   },
   {
@@ -46,7 +47,7 @@ export const services: Service[] = [
     description: 'Coloração profissional para cobrir brancos ou mudar o visual.',
     duration: 90,
     price: 80,
-    icon: '🎨',
+    icon: Palette,
     features: ['Aconsulta de cor', 'Aplicação', 'Tempo de ação', 'Lavagem']
   },
   {
@@ -55,7 +56,7 @@ export const services: Service[] = [
     description: 'Hidratação profunda e tratamento para cabelos danificados.',
     duration: 45,
     price: 60,
-    icon: '💆',
+    icon: Palette,
     features: ['Diagnóstico', 'Máscara de tratamento', 'Massagem', 'Secagem']
   }
 ];
@@ -117,10 +118,10 @@ export const barbers: Barber[] = [
 
 // Informações de contato
 export const contactInfo: ContactInfo = {
-  address: 'Av. Principal, 1234 - Centro',
-  phone: '(11) 99999-9999',
-  whatsapp: '5511999999999',
-  email: 'contato@royalbarber.com.br',
+  address: 'Av. Afonso Pena, 2681 - Centro, Belo Horizonte - MG, 30130-004',
+  phone: '(31) 3222-9999',
+  whatsapp: '5531988888888',
+  email: 'contato@royalbarberbh.com.br',
   openingHours: {
     weekdays: '09:00 - 20:00',
     saturday: '09:00 - 18:00',

@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useState as useReactState } from 'react';
+import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { 
   Scissors, 
@@ -13,11 +14,59 @@ import {
   ChevronRight,
   Phone,
   MapPin,
-  Clock3
+  Clock3,
+  ScissorsIcon,
+  Paintbrush,
+  Palette,
+  Icon,
+  
+  
 } from 'lucide-react';
 import { services, barbers, createAppointment, getBarberAppointments, formatWhatsAppMessage } from '@/lib/data';
 import { saveAppointment, getBarberAppointmentsForDate } from '@/lib/supabase';
 import { Service, Barber, TimeSlot } from '@/types';
+
+
+function BarberAvatar({ barber, size = 80 }: { barber: Barber; size?: number }) {
+  const [imageError, setImageError] = useReactState(false);
+  const [imageLoaded, setImageLoaded] = useReactState(false);
+  
+    const initials = barber.name
+    .split(' ')
+    .map(n => n[0])
+    .join('')
+    .substring(0, 2)
+    .toUpperCase();
+
+  const photoPath = `/barbers/${barber.photo.includes('carlos') ? 'carlos' : barber.photo.includes('roberto') ? 'roberto' : 'marcos'}.svg`;
+
+  return (
+    <div 
+      className="rounded-full overflow-hidden bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center text-white font-bold"
+      style={{ width: size, height: size }}
+    >
+      {!imageError && barber.photo ? (
+        <div className={`relative ${!imageLoaded ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`}>
+          <Image
+            src={photoPath}
+            alt={barber.name}
+            width={size}
+            height={size}
+            className="object-cover"
+            onError={() => setImageError(true)}
+            onLoad={() => setImageLoaded(true)}
+          />
+        </div>
+      ) : null}
+      <span 
+        className={`absolute ${!imageError && barber.photo && imageLoaded ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`}
+        style={{ fontSize: size * 0.4 }}
+      >
+        {initials}
+      </span>
+    </div>
+  );
+}
 
 type Step = 'service' | 'barber' | 'date' | 'time' | 'customer' | 'confirmation';
 
@@ -223,7 +272,7 @@ export default function BookingForm() {
         bookingData.customerName
       );
       
-      const whatsappUrl = `https://wa.me/5511999999999?text=${encodeURIComponent(message)}`;
+      const whatsappUrl = `https://wa.me/5531990855251?text=${encodeURIComponent(message)}`;
       window.open(whatsappUrl, '_blank');
 
       setTimeout(() => {
@@ -308,7 +357,11 @@ export default function BookingForm() {
           >
             <div className="flex items-start gap-4">
               <div className={`p-3 rounded-xl ${bookingData.service?.id === service.id ? 'bg-amber-500' : 'bg-gray-800'}`}>
-                <span className="text-2xl">{service.icon}</span>
+                
+                <span className="text-2xl">
+                 {service.icon && <service.icon size={28} />}
+                </span>
+
               </div>
               <div className="flex-1">
                 <h3 className="font-bold text-white text-lg">{service.name}</h3>
@@ -346,8 +399,8 @@ export default function BookingForm() {
                 : 'bg-gray-900/80 border-gray-800 hover:border-amber-500/50'
             }`}
           >
-            <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center text-4xl border-2 border-gray-700">
-              {barber.photo.includes('carlos') ? '👨‍🎨' : barber.photo.includes('roberto') ? '🧔' : '💇‍♂️'}
+            <div className="w-20 h-20 mx-auto mb-4">
+              <BarberAvatar barber={barber} size={80} />
             </div>
             <h3 className="font-bold text-white text-lg">{barber.name}</h3>
             <p className="text-amber-500 text-sm mt-1">{barber.specialty}</p>
@@ -585,7 +638,9 @@ export default function BookingForm() {
         <div className="bg-gray-900/80 rounded-2xl p-6 space-y-4 border border-gray-800">
           <div className="flex items-center gap-4 p-4 bg-gray-800/50 rounded-xl">
             <div className="p-3 bg-amber-500/20 rounded-xl">
-              <span className="text-2xl">{bookingData.service.icon}</span>
+              <span className="text-2xl">
+                {bookingData.service.icon && <bookingData.service.icon size={28} />}
+              </span>
             </div>
             <div className="flex-1">
               <p className="text-gray-400 text-xs">Serviço</p>
@@ -595,9 +650,7 @@ export default function BookingForm() {
           </div>
           
           <div className="flex items-center gap-4 p-4 bg-gray-800/50 rounded-xl">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center text-xl">
-              👨‍🎨
-            </div>
+            <BarberAvatar barber={bookingData.barber} size={48} />
             <div className="flex-1">
               <p className="text-gray-400 text-xs">Barbeiro</p>
               <p className="font-bold text-white">{bookingData.barber.name}</p>

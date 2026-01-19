@@ -9,6 +9,11 @@ import {
   ArrowRight,
   Sparkles,
   Timer,
+  Scissors,
+  User,
+  TrendingUp,
+  Palette,
+  Crown,
 } from 'lucide-react';
 import { Service } from '@/types';
 import { cn, formatPrice } from '@/lib/utils';
@@ -26,21 +31,21 @@ export default function ServiceCard({
 }: ServiceCardProps) {
   const [isHovered, setIsHovered] = useState(false);
 
-  // Service icon mapping for visual variety
+  
   const getServiceIcon = (name: string) => {
-    const icons: Record<string, string> = {
-      'Corte': '✂️',
-      'Barba': '🧔',
-      'Degradê': '🎯',
-      'Coloração': '🎨',
-      'Tratamento': '💆',
-      'Combo': '💈',
+    const icons: Record<string, React.ReactNode> = {
+      'Corte': <Scissors className="w-10 h-10 text-amber-500" />,
+      'Barba': <User className="w-10 h-10 text-amber-500" />,
+      'Degradê': <TrendingUp className="w-10 h-10 text-amber-500" />,
+      'Coloração': <Palette className="w-10 h-10 text-amber-500" />,
+      'Tratamento': <Sparkles className="w-10 h-10 text-amber-500" />,
+      'Combo': <Crown className="w-10 h-10 text-amber-500" />,
     };
     
     for (const [key, icon] of Object.entries(icons)) {
       if (name.includes(key)) return icon;
     }
-    return '✨';
+    return <Sparkles className="w-10 h-10 text-amber-500" />;
   };
 
   const serviceIcon = getServiceIcon(service.name);
@@ -109,7 +114,7 @@ export default function ServiceCard({
             
             {/* Icon container */}
             <div className="relative w-full h-full bg-gradient-to-br from-amber-500/20 to-orange-500/20 rounded-2xl flex items-center justify-center border border-amber-500/30">
-              <span className="text-4xl">{serviceIcon}</span>
+              {serviceIcon}
             </div>
 
             {/* Sparkle effect */}

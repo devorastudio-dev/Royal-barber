@@ -220,44 +220,37 @@ function ContactContent() {
 
               <div className="relative bg-gradient-to-br from-gray-900/80 to-gray-800/30 rounded-3xl p-2 border border-gray-800/50 overflow-hidden">
                 <div className="aspect-[4/3] bg-gray-800 rounded-2xl relative overflow-hidden">
-                  {/* Map placeholder with image */}
-                  <Image
-                    src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5ce?w=800&q=80"
-                    alt="Localização da barbearia"
-                    fill
-                    className="object-cover opacity-50"
+                  {/* Google Maps Embed */}
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3750.985456789012!2d-43.9378!3d-19.9167!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa699db334444444%3A0x4444444444444444!2sAv.%20Afonso%20Pena%2C%202681%20-%20Centro%2C%20Belo%20Horizonte%20-%20MG!5e0!3m2!1spt-BR!2sbr!4v1234567890000!5m2!1spt-BR!2sbr"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    className="absolute inset-0"
+                    title="Localização da Royal Barber"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent" />
-
-                  {/* Map marker */}
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                    <motion.div
-                      animate={{ y: [0, -20, 0] }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                      className="relative"
-                    >
-                      <div className="w-16 h-16 bg-amber-500 rounded-full flex items-center justify-center shadow-2xl shadow-amber-500/50">
-                        <Scissors className="w-8 h-8 text-black" />
-                      </div>
-                      <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-amber-500 rotate-45" />
-                    </motion.div>
-                  </div>
+                  {/* Overlay for better visibility of text */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent pointer-events-none" />
                 </div>
 
                 {/* Address card */}
                 <div className="absolute bottom-4 left-4 right-4">
-                  <div className="bg-black/80 backdrop-blur-sm rounded-xl p-4 border border-gray-700/50">
+                  <div className="bg-black/90 backdrop-blur-sm rounded-xl p-4 border border-gray-700/50">
                     <div className="flex items-center gap-3">
-                      <div className="p-2 bg-amber-500/20 rounded-lg">
+                      <div className="p-2 bg-amber-500/20 rounded-lg flex-shrink-0">
                         <MapPin className="w-5 h-5 text-amber-500" />
                       </div>
-                      <div>
-                        <p className="text-white font-medium">{contactInfo.address}</p>
+                      <div className="min-w-0">
+                        <p className="text-white font-medium text-sm truncate">{contactInfo.address.split(',')[0]}</p>
+                        <p className="text-gray-400 text-xs truncate">{contactInfo.address.split(',')[1]?.trim()}</p>
                         <a
                           href={`https://maps.google.com/?q=${encodeURIComponent(contactInfo.address)}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-amber-500 text-sm hover:text-amber-400 flex items-center gap-1"
+                          className="text-amber-500 text-xs hover:text-amber-400 flex items-center gap-1 mt-1"
                         >
                           Abrir no Google Maps
                           <ArrowRight className="w-3 h-3" />

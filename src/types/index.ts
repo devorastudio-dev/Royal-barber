@@ -1,12 +1,14 @@
-// Tipos para o sistema de barbearia
+import { LucideIcon } from "lucide-react";
+import { ReactNode } from "react";
+
 
 export interface Service {
   id: string;
   name: string;
   description: string;
-  duration: number; // em minutos
+  duration: number; 
   price?: number;
-  icon: string;
+  icon?: LucideIcon; 
   features: string[];
 }
 
@@ -33,7 +35,7 @@ export interface WeeklySchedule {
 export interface DaySchedule {
   enabled: boolean;
   start: string; // "09:00"
-  end: string; // "18:00"
+  end: string; // "18:
   breaks?: Break[];
 }
 
