@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   Scissors,
   Calendar,
@@ -17,11 +17,7 @@ import {
   CheckCircle2,
   Sparkles,
   ChevronRight,
-  Play,
-  Quote,
   PhoneCall,
-  Menu,
-  X,
 } from 'lucide-react';
 import { services, barbers, contactInfo } from '@/lib/data';
 import ServiceCard from '@/components/ServiceCard';
@@ -78,76 +74,51 @@ const testimonials = [
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
 
   useEffect(() => {
-    if (!isPlaying) return;
-
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [isPlaying]);
+  }, []);
 
   const featuredServices = services.slice(0, 3);
   const featuredBarbers = barbers.slice(0, 3);
 
   return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
+    <div className="min-h-screen overflow-x-hidden">
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Background Slideshow */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentSlide}
-            initial={{ opacity: 0, scale: 1.1 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1 }}
-            className="absolute inset-0"
+        {slides.map((slide, index) => (
+          <div
+            key={slide.id}
+            className={cn(
+              'absolute inset-0 transition-opacity duration-1000',
+              index === currentSlide ? 'opacity-100' : 'opacity-0'
+            )}
           >
             <Image
-              src={slides[currentSlide].image}
-              alt={slides[currentSlide].title}
+              src={slide.image}
+              alt={slide.title}
               fill
               className="object-cover"
-              priority
+              priority={index === 0}
+              sizes="100vw"
             />
             <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black/90" />
-          </motion.div>
-        </AnimatePresence>
+          </div>
+        ))}
 
-        {/* Animated background effects */}
-        <div className="absolute inset-0 overflow-hidden">
-          <motion.div
-            animate={{
-              scale: [1, 1.2, 1],
-              opacity: [0.3, 0.5, 0.3],
-            }}
-            transition={{ duration: 8, repeat: Infinity }}
-            className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-amber-500/20 rounded-full blur-[120px]"
-          />
-          <motion.div
-            animate={{
-              scale: [1.2, 1, 1.2],
-              opacity: [0.2, 0.4, 0.2],
-            }}
-            transition={{ duration: 10, repeat: Infinity }}
-            className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-orange-500/10 rounded-full blur-[150px]"
-          />
-          <div className="absolute inset-0 bg-pattern-grid opacity-20" />
+        <div className="absolute inset-0">
+          <div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-amber-500/10 rounded-full blur-[60px]" />
+          <div className="absolute bottom-1/4 right-1/4 w-[350px] h-[350px] bg-orange-500/10 rounded-full blur-[80px]" />
         </div>
 
-        {/* Slide Controls */}
         <div className="absolute bottom-32 left-1/2 -translate-x-1/2 flex gap-3 z-20">
           {slides.map((_, index) => (
             <button
               key={index}
-              onClick={() => {
-                setCurrentSlide(index);
-                setIsPlaying(false);
-              }}
+              onClick={() => setCurrentSlide(index)}
               className={cn(
                 'w-3 h-3 rounded-full transition-all duration-300',
                 currentSlide === index
@@ -158,26 +129,22 @@ export default function Home() {
           ))}
         </div>
 
-        {/* Content */}
         <div className="relative z-10 max-w-6xl mx-auto px-4 text-center">
           <motion.div
-            key={currentSlide}
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
+            transition={{ duration: 0.8 }}
           >
-            {/* Badge */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.4 }}
+              transition={{ delay: 0.2 }}
               className="inline-flex items-center gap-2 px-6 py-3 bg-amber-500/10 backdrop-blur-sm border border-amber-500/30 rounded-full text-amber-500 text-sm font-medium mb-8"
             >
-              <Sparkles className="w-5 h-5 animate-pulse" />
-               Barbearia Premium desde 2008
+              <Sparkles className="w-5 h-5" />
+              Barbearia Premium desde 2008
             </motion.div>
 
-            {/* Title */}
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight">
               <span className="text-white">{slides[currentSlide].title}</span>
               <br />
@@ -186,17 +153,15 @@ export default function Home() {
               </span>
             </h1>
 
-            {/* Subtitle */}
             <p className="text-xl md:text-2xl text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
               {slides[currentSlide].subtitle}
             </p>
 
-            {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
               <motion.div
                 initial={{ opacity: 0, x: -30 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.5 }}
+                transition={{ delay: 0.4 }}
               >
                 <Link
                   href="/agendamento"
@@ -204,23 +169,19 @@ export default function Home() {
                     'inline-flex items-center gap-3 px-8 py-4',
                     'bg-gradient-to-r from-amber-500 to-amber-600 text-black font-bold text-lg rounded-2xl',
                     'hover:from-amber-400 hover:to-amber-500 transition-all duration-300',
-                    'hover:scale-105 hover:shadow-2xl hover:shadow-amber-500/30',
-                    'relative overflow-hidden'
+                    'hover:scale-105'
                   )}
                 >
-                  <span className="absolute inset-0 overflow-hidden">
-                    <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full animate-shimmer" />
-                  </span>
-                  <Calendar className="w-6 h-6 relative z-10" />
-                  <span className="relative z-10">Agendar Horário</span>
-                  <ArrowRight className="w-5 h-5 relative z-10" />
+                  <Calendar className="w-6 h-6" />
+                  <span>Agendar Horário</span>
+                  <ArrowRight className="w-5 h-5" />
                 </Link>
               </motion.div>
 
               <motion.div
                 initial={{ opacity: 0, x: 30 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.6 }}
+                transition={{ delay: 0.5 }}
               >
                 <Link
                   href="/servicos"
@@ -232,7 +193,6 @@ export default function Home() {
               </motion.div>
             </div>
 
-            {/* Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
               {[
                 { icon: Award, value: '15+', label: 'Anos de experiência' },
@@ -246,7 +206,7 @@ export default function Home() {
                     key={stat.label}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.7 + index * 0.1 }}
+                    transition={{ delay: 0.6 + index * 0.1 }}
                     className="text-center"
                   >
                     <div className="inline-flex items-center justify-center w-14 h-14 bg-amber-500/10 rounded-2xl mb-3">
@@ -263,7 +223,6 @@ export default function Home() {
           </motion.div>
         </div>
 
-        {/* Scroll indicator */}
         <motion.div
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
@@ -275,15 +234,11 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* Featured Services */}
-      <section className="py-32 px-4 relative">
+      <section className="py-24 px-4 relative overflow-hidden">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-500/20 to-transparent" />
-        
-        {/* Background effects */}
         <div className="absolute inset-0 bg-pattern-dots opacity-10" />
 
         <div className="max-w-7xl mx-auto">
-          {/* Section Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -306,14 +261,12 @@ export default function Home() {
             </p>
           </motion.div>
 
-          {/* Services Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {featuredServices.map((service, index) => (
               <ServiceCard key={service.id} service={service} index={index} showBookButton />
             ))}
           </div>
 
-          {/* View All */}
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -331,13 +284,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Why Choose Us */}
-      <section className="py-32 px-4 bg-gradient-to-b from-transparent via-gray-900/50 to-transparent relative">
+      <section className="py-24 px-4 bg-gradient-to-b from-transparent via-gray-900/50 to-transparent relative overflow-hidden">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-500/20 to-transparent" />
         
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            {/* Content */}
             <div>
               <motion.div
                 initial={{ opacity: 0, x: -30 }}
@@ -375,9 +326,9 @@ export default function Home() {
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: index * 0.1 }}
-                        className="flex items-start gap-4 p-5 bg-gray-900/50 rounded-2xl border border-gray-800 hover:border-amber-500/30 hover:bg-gray-900/80 transition-all group"
+                        className="flex items-start gap-4 p-5 bg-gray-900/50 rounded-2xl border border-gray-800 hover:border-amber-500/30 hover:bg-gray-900/80 transition-all"
                       >
-                        <div className="p-3 bg-amber-500/20 rounded-xl group-hover:scale-110 transition-transform">
+                        <div className="p-3 bg-amber-500/20 rounded-xl">
                           <Icon className="w-6 h-6 text-amber-500" />
                         </div>
                         <div>
@@ -391,7 +342,6 @@ export default function Home() {
               </motion.div>
             </div>
 
-            {/* Image/Visual */}
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -399,52 +349,42 @@ export default function Home() {
               className="relative"
             >
               <div className="relative aspect-square">
-                {/* Main image */}
                 <div className="absolute inset-0 bg-gradient-to-br from-amber-500/20 to-black rounded-3xl overflow-hidden border border-amber-500/20">
                   <Image
                     src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=800"
                     alt="Barber shop interior"
                     fill
                     className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 50vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                 </div>
 
-                {/* Floating cards */}
-                <motion.div
-                  animate={{ y: [0, -10, 0] }}
-                  transition={{ duration: 4, repeat: Infinity }}
-                  className="absolute -top-6 -right-6 p-4 bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl shadow-2xl shadow-amber-500/30"
-                >
-                  <div className="text-4xl">✂️</div>
-                </motion.div>
+                <div className="absolute -top-4 -right-2 p-4 bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl shadow-xl">
+                  <div className="text-4xl">
+                    <Scissors className="w-8 h-8 text-black" />
+                  </div>
+                </div>
 
-                <motion.div
-                  animate={{ y: [0, 10, 0] }}
-                  transition={{ duration: 5, repeat: Infinity }}
-                  className="absolute -bottom-4 -left-4 p-4 bg-gray-800 rounded-2xl border-2 border-amber-500/30 shadow-xl"
-                >
-                  <div className="text-3xl">🧔</div>
-                </motion.div>
+                <div className="absolute -bottom-4 -left-4 p-4 bg-gray-800 rounded-2xl border-2 border-amber-500/30 shadow-xl">
+                  <div className="text-3xl">
+                    <PhoneCall className="w-7 h-7 text-amber-500" />
+                  </div>
+                </div>
 
-                <motion.div
-                  animate={{ scale: [1, 1.1, 1] }}
-                  transition={{ duration: 3, repeat: Infinity }}
-                  className="absolute top-1/2 -right-8 p-3 bg-green-500/20 backdrop-blur-sm rounded-xl border border-green-500/30"
-                >
+                <div className="absolute top-1/2 -right-3 p-3 bg-green-500/20 backdrop-blur-sm rounded-xl border border-green-500/30">
                   <div className="flex items-center gap-2 text-green-400">
                     <CheckCircle2 className="w-6 h-6" />
                     <span className="font-bold">5.0 ★★★★★</span>
                   </div>
-                </motion.div>
+                </div>
               </div>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Featured Barbers */}
-      <section className="py-32 px-4 relative">
+      <section className="py-24 px-4 relative overflow-hidden">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-500/20 to-transparent" />
         <div className="absolute inset-0 bg-pattern-grid opacity-10" />
 
@@ -494,8 +434,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="py-32 px-4 bg-gradient-to-b from-transparent via-gray-900/50 to-transparent relative">
+      <section className="py-24 px-4 bg-gradient-to-b from-transparent via-gray-900/50 to-transparent relative overflow-hidden">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-500/20 to-transparent" />
 
         <div className="max-w-7xl mx-auto">
@@ -525,26 +464,22 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="relative bg-gradient-to-br from-gray-900/80 to-gray-800/30 rounded-3xl p-8 border border-gray-800/50 hover:border-amber-500/30 transition-all group"
+                className="relative bg-gradient-to-br from-gray-900/80 to-gray-800/30 rounded-3xl p-8 border border-gray-800/50 hover:border-amber-500/30 transition-all"
               >
-                {/* Quote icon */}
                 <div className="absolute -top-4 left-8 p-3 bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl">
                   <Quote className="w-5 h-5 text-black" />
                 </div>
 
-                {/* Rating */}
                 <div className="flex gap-1 mb-6 mt-4">
                   {[...Array(testimonial.rating)].map((_, i) => (
                     <Star key={i} className="w-5 h-5 text-amber-500 fill-amber-500" />
                   ))}
                 </div>
 
-                {/* Text */}
                 <p className="text-gray-300 text-lg leading-relaxed mb-6">
                   "{testimonial.text}"
                 </p>
 
-                {/* Author */}
                 <div className="flex items-center gap-4">
                   <div className="w-14 h-14 rounded-full overflow-hidden bg-gradient-to-br from-amber-500 to-orange-600">
                     <Image
@@ -566,8 +501,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-32 px-4 relative">
+      <section className="py-24 px-4 relative overflow-hidden">
         <div className="max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
@@ -575,9 +509,8 @@ export default function Home() {
             viewport={{ once: true }}
             className="relative bg-gradient-to-r from-amber-500/20 via-amber-600/10 to-amber-500/20 rounded-3xl p-12 border border-amber-500/20 overflow-hidden"
           >
-            {/* Background elements */}
-            <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/10 rounded-full blur-[120px]" />
-            <div className="absolute bottom-0 left-0 w-64 h-64 bg-amber-500/10 rounded-full blur-[100px]" />
+            <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 rounded-full blur-[60px]" />
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-amber-500/10 rounded-full blur-[60px]" />
             <div className="absolute inset-0 bg-pattern-dots opacity-20" />
 
             <div className="relative z-10 text-center">
@@ -610,15 +543,11 @@ export default function Home() {
                     'inline-flex items-center gap-3 px-8 py-4',
                     'bg-gradient-to-r from-amber-500 to-amber-600 text-black font-bold text-lg rounded-2xl',
                     'hover:from-amber-400 hover:to-amber-500 transition-all duration-300',
-                    'hover:scale-105 hover:shadow-2xl hover:shadow-amber-500/30',
-                    'relative overflow-hidden'
+                    'hover:scale-105'
                   )}
                 >
-                  <span className="absolute inset-0 overflow-hidden">
-                    <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full animate-shimmer" />
-                  </span>
-                  <Calendar className="w-6 h-6 relative z-10" />
-                  <span className="relative z-10">Agendar Agora</span>
+                  <Calendar className="w-6 h-6" />
+                  <span>Agendar Agora</span>
                 </Link>
 
                 <a
@@ -636,8 +565,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Quick Contact */}
-      <section className="py-20 px-4 border-t border-gray-800">
+      <section className="py-20 px-4 border-t border-gray-800 overflow-hidden">
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <motion.a
@@ -649,7 +577,7 @@ export default function Home() {
               rel="noopener noreferrer"
               className="p-8 bg-gradient-to-br from-gray-900/80 to-gray-800/30 rounded-3xl border border-gray-800 hover:border-green-500/50 hover:bg-green-500/10 transition-all group text-center"
             >
-              <div className="w-16 h-16 mx-auto mb-4 bg-green-500/20 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+              <div className="w-16 h-16 mx-auto mb-4 bg-green-500/20 rounded-2xl flex items-center justify-center">
                 <Phone className="w-8 h-8 text-green-500" />
               </div>
               <h3 className="font-bold text-white text-xl mb-2">WhatsApp</h3>
@@ -664,7 +592,7 @@ export default function Home() {
               transition={{ delay: 0.1 }}
               className="p-8 bg-gradient-to-br from-gray-900/80 to-gray-800/30 rounded-3xl border border-gray-800 hover:border-amber-500/50 hover:bg-amber-500/10 transition-all group text-center"
             >
-              <div className="w-16 h-16 mx-auto mb-4 bg-amber-500/20 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+              <div className="w-16 h-16 mx-auto mb-4 bg-amber-500/20 rounded-2xl flex items-center justify-center">
                 <MapPin className="w-8 h-8 text-amber-500" />
               </div>
               <h3 className="font-bold text-white text-xl mb-2">Localização</h3>
@@ -679,7 +607,7 @@ export default function Home() {
               transition={{ delay: 0.2 }}
               className="p-8 bg-gradient-to-br from-gray-900/80 to-gray-800/30 rounded-3xl border border-gray-800 hover:border-blue-500/50 hover:bg-blue-500/10 transition-all group text-center"
             >
-              <div className="w-16 h-16 mx-auto mb-4 bg-blue-500/20 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+              <div className="w-16 h-16 mx-auto mb-4 bg-blue-500/20 rounded-2xl flex items-center justify-center">
                 <Clock className="w-8 h-8 text-blue-500" />
               </div>
               <h3 className="font-bold text-white text-xl mb-2">Horário</h3>
@@ -693,12 +621,10 @@ export default function Home() {
   );
 }
 
-// Pause icon component
-function PauseIcon({ className }: { className?: string }) {
+function Quote({ className }: { className?: string }) {
   return (
     <svg className={className} fill="currentColor" viewBox="0 0 24 24">
-      <rect x="6" y="4" width="4" height="16" rx="1" />
-      <rect x="14" y="4" width="4" height="16" rx="1" />
+      <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
     </svg>
   );
 }
