@@ -36,3 +36,95 @@ export function mapAppointmentRow(row: AppointmentRow) {
   };
 }
 
+// Função para salvar agendamento
+export async function saveAppointment(appointmentData: {
+  service_id: string;
+  service_name: string;
+  barber_id: string;
+  barber_name: string;
+  customer_name: string;
+  customer_phone: string;
+  appointment_date: string;
+  appointment_time: string;
+  notes?: string;
+}) {
+  try {
+    const { data, error } = await supabase
+      .from('appointments')
+      .insert([appointmentData])
+      .select();
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return { success: true, data };
+  } catch (error) {
+    console.error('Erro ao salvar agendamento:', error);
+    return { success: false, error };
+  }
+}
+
+// Função para buscar agendamentos de um barbeiro em uma data
+export async function getBarberAppointmentsForDate(
+  barberId: string,
+  date: string
+) {
+  try {
+    const { data, error } = await supabase
+      .from('appointments')
+      .select('*')
+      .eq('barber_id', barberId)
+      .eq('appointment_date', date)
+      .eq('status', 'confirmed');
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return data || [];
+  } catch (error) {
+    console.error('Erro ao buscar agendamentos:', error);
+    return [];
+  }
+}
+
+// Função para buscar todos os agendamentos
+export async function getAllAppointments() {
+  try {
+    const { data, error } = await supabase
+      .from('appointments')
+      .select('*')
+      .order('appointment_date', { ascending: true });
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return data || [];
+  } catch (error) {
+    console.error('Erro ao buscar agendamentos:', error);
+    return [];
+  }
+}
+
+// Função para cancelar agendamento
+export async function cancelAppointment(id: string) {
+  try {
+    const { data, error } = await supabase
+      .from('appointments')
+      .update({ status: 'cancelled' })
+      .eq('id', id)
+      .select();
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return { success: true, data };
+  } catch (error) {
+    console.error('Erro ao cancelar agendamento:', error);
+    return { success: false, error };
+  }
+}
+

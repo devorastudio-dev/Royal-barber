@@ -1,8 +1,7 @@
-'use client';
-
+import { Suspense } from 'react';
 import BookingForm from '@/components/BookingForm';
 
-export default function BookingPage() {
+function BookingContent() {
   return (
     <div className="min-h-screen py-20 px-4">
       <div className="max-w-4xl mx-auto">
@@ -69,6 +68,14 @@ export default function BookingPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function BookingPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Carregando...</div>}>
+      <BookingContent />
+    </Suspense>
   );
 }
 

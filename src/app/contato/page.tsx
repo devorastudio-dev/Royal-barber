@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -20,7 +20,7 @@ import {
   ChevronRight,
 } from 'lucide-react';
 
-export default function ContactPage() {
+function ContactContent() {
   const searchParams = useSearchParams();
   const [showSuccess, setShowSuccess] = useState(false);
   const [formData, setFormData] = useState({
@@ -457,6 +457,14 @@ function Scissors({ className }: { className?: string }) {
       <line x1="14.47" y1="14.48" x2="20" y2="20" />
       <line x1="8.12" y1="8.12" x2="12" y2="12" />
     </svg>
+  );
+}
+
+export default function ContactPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Carregando...</div>}>
+      <ContactContent />
+    </Suspense>
   );
 }
 

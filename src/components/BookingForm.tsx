@@ -16,6 +16,7 @@ import {
   Clock3
 } from 'lucide-react';
 import { services, barbers, createAppointment, getBarberAppointments, formatWhatsAppMessage } from '@/lib/data';
+import { saveAppointment, getBarberAppointmentsForDate } from '@/lib/supabase';
 import { Service, Barber, TimeSlot } from '@/types';
 
 type Step = 'service' | 'barber' | 'date' | 'time' | 'customer' | 'confirmation';
@@ -186,6 +187,24 @@ export default function BookingForm() {
 
       const dateStr = bookingData.date.toISOString().split('T')[0];
 
+      // Salvar no Supabase
+      const result = await saveAppointment({
+        service_id: bookingData.service.id,
+        service_name: bookingData.service.name,
+        barber_id: bookingData.barber.id,
+        barber_name: bookingData.barber.name,
+        customer_name: bookingData.customerName,
+        customer_phone: bookingData.customerPhone,
+        appointment_date: dateStr,
+        appointment_time: bookingData.time,
+        notes: `Duração: ${bookingData.service.duration}min. Horário final: ${endTime}`
+      });
+
+      if (!result.success) {
+        throw new Error('Erro ao salvar agendamento no banco de dados');
+      }
+
+      // Manter o localStorage para compatibilidade
       await createAppointment(
         bookingData.service.id,
         bookingData.barber.id,
@@ -213,6 +232,7 @@ export default function BookingForm() {
 
     } catch (error) {
       console.error('Error creating appointment:', error);
+      alert('Erro ao criar agendamento. Tente novamente.');
     } finally {
       setIsSubmitting(false);
     }
